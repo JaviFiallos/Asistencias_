@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(94, 3, 155, 50);
+    overflow: hidden;
+}
+
+.illustration {
+    background-color: #F2F2F2;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.illustration img {
+    width: 100%;
+    height: auto;
+}
+
+.login-form {
+    padding: 40px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form h2 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    color: #4c007d;
+    text-align: center;
+}
+
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #7f00b2;
+    margin-bottom: 5px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #7f00b2;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 10px 10px 10px 30px;   
+    font-size: 14px;
+    border: 1px solid #4c007d;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.numero-intentos {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #eb3db1;
+}
+
+.sign-in-btn {
+    background-color: #9D4BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.sign-in-btn:hover {
+    background-color: #4c007d;
+}
+
+.error-message {
+    color: #320053;
+    margin-top: 5%;
+    align-items: center;
+    text-align: center;
+    font-size: 75%;
+}
