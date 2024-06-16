@@ -5,7 +5,7 @@ class Conexion {
     public $con;
 
     public function __construct() {
-        $this->con = mysqli_connect("localhost","root","1805162433","universidad");
+        $this->con = mysqli_connect("localhost","root","1805162433","asistencia");
     }
 
     public function testConnection(){    

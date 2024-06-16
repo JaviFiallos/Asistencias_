@@ -3,18 +3,13 @@
 class Controller
 {
 
-    public function plantilla(){
-
-        include "views/plantilla.php";
-    }
-
     function enlacesPaginasController()
     {
         if(isset($_GET["action"]))
         {
             $enlacesController = $_GET["action"];
         }else{
-            $enlacesController = "inicio.php";
+            $enlacesController = "home.php";
         }
 
         $respuesta = EnlacesPaginas::enlacesPaginasModel($enlacesController);

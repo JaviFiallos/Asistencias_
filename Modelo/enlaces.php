@@ -2,12 +2,11 @@
 
 class EnlacesPaginas {
     public static function enlacesPaginasModel($enlacesModel){
-        if($enlacesModel == "nosotros" || 
-        $enlacesModel == "servicios" || 
-        $enlacesModel == "contactanos" ){
-            $modeule = "views/interfaces/".$enlacesModel.".php";
+        if($enlacesModel == "usuarios" || 
+        $enlacesModel == "asistencia" ){
+            $modeule = "./Interfaces/".$enlacesModel.".php";
         }else {
-            $modeule = "views/interfaces/inicio.php";
+            $modeule = "./Interfaces/home.php";
         }
         return $modeule;
     }
