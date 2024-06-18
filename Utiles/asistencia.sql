@@ -16,36 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `dias`
---
-
-DROP TABLE IF EXISTS `dias`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dias` (
-  `ID_DIA` int NOT NULL AUTO_INCREMENT,
-  `ID_EMP_PER` int NOT NULL,
-  `FECHA` date DEFAULT NULL,
-  `TOTAL_DESC_POR_DIA` decimal(10,2) DEFAULT '0.00',
-  `TOTAL_HORAS_POR_DIA` decimal(10,2) DEFAULT '0.00',
-  `SALDO_TOTAL_DIARIO` decimal(10,2) DEFAULT '0.00',
-  PRIMARY KEY (`ID_DIA`),
-  KEY `FK_EMP_DIA_idx` (`ID_EMP_PER`),
-  CONSTRAINT `FK_EMP_DIA` FOREIGN KEY (`ID_EMP_PER`) REFERENCES `empleados` (`ID_EMP`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dias`
---
-
-LOCK TABLES `dias` WRITE;
-/*!40000 ALTER TABLE `dias` DISABLE KEYS */;
-INSERT INTO `dias` VALUES (1,1,'2024-06-17',0.00,0.00,0.00),(2,1,'2024-06-18',0.00,0.00,0.00),(3,1,'2024-06-19',0.00,0.00,0.00),(4,1,'2024-06-20',0.00,0.00,0.00),(5,1,'2024-06-21',0.00,0.00,0.00);
-/*!40000 ALTER TABLE `dias` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `empleados`
 --
 
@@ -54,10 +24,11 @@ DROP TABLE IF EXISTS `empleados`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `empleados` (
   `ID_EMP` int NOT NULL AUTO_INCREMENT,
-  `NOM_EMP` varchar(25) DEFAULT NULL,
-  `APE_APE` varchar(25) DEFAULT NULL,
   `CED_EMP` varchar(20) NOT NULL,
   `PASS_EMP` varchar(45) NOT NULL,
+  `NOM_EMP` varchar(25) DEFAULT NULL,
+  `APE_EMP` varchar(25) DEFAULT NULL,
+  `CORR_EMP` varchar(50) DEFAULT NULL,
   `EST_EMP` tinyint DEFAULT '0',
   `ROL_EMP` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`ID_EMP`)
@@ -70,7 +41,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'JOEL','DURAN','1801','1801',1,'ADMIN'),(2,'ANGELA','ARMIJOS','1802','1802',0,'DOCENTE');
+INSERT INTO `empleados` VALUES (1,'1801','1801','JOEL_M','DURAN','jduran4532@uta.edu.ec',1,'ADMIN'),(2,'1802','1802','ANGELA','ARMIJOS','aarmijos2104@uta.edu.ec',0,'DOCENTE');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,14 +83,17 @@ DROP TABLE IF EXISTS `registro_asistencia`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `registro_asistencia` (
   `ID_REG` int NOT NULL AUTO_INCREMENT,
+  `FECHA` date NOT NULL,
   `JORNADA` varchar(20) DEFAULT NULL,
   `HORA_INGRESO` time DEFAULT NULL,
   `HORA_SALIDA` time DEFAULT NULL,
   `DESCUENTO` decimal(10,2) DEFAULT '0.00',
-  `ID_DIA_PER` int NOT NULL,
+  `HORAS_POR_JORNADA` time DEFAULT '00:00:00',
+  `SUBTOTAL_JORNADA` decimal(10,2) DEFAULT '0.00',
+  `ID_EMP_PER` int DEFAULT NULL,
   PRIMARY KEY (`ID_REG`),
-  KEY `FK_DIA_REG_idx` (`ID_DIA_PER`),
-  CONSTRAINT `FK_DIA_REG` FOREIGN KEY (`ID_DIA_PER`) REFERENCES `dias` (`ID_DIA`)
+  KEY `FK_EMP_REG_idx` (`ID_EMP_PER`),
+  CONSTRAINT `FK_EMP_REG` FOREIGN KEY (`ID_EMP_PER`) REFERENCES `empleados` (`ID_EMP`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -141,4 +115,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-16 16:35:00
+-- Dump completed on 2024-06-18 12:38:06
