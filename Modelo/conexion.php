@@ -1,18 +1,36 @@
 <?php
 
 class Conexion {
-
-    public $con;
+    private $con;
 
     public function __construct() {
-        $this->con = mysqli_connect("localhost","root","1805162433","asistencia");
+        $this->con = null;
     }
 
-    public function testConnection(){    
-        if(!$this->con){
-            die("Error".mysqli_connect_error());
-        }else {
-            print_r("Se conecto");
+    public function conectar() {
+        try {
+            $this->con = mysqli_connect("localhost", "root", "", "asistencia");
+
+            if (!$this->con) {
+                throw new Exception("Error en la conexión: " . mysqli_connect_error());
+            }
+
+            echo "Se conectó exitosamente<br>";
+        } catch (Exception $e) {
+            echo "Excepción capturada: " . $e->getMessage() . "<br>";
+        }
+    }
+
+    public function getConexion() {
+        return $this->con;
+    }
+
+    public function cerrarConexion() {
+        if ($this->con) {
+            mysqli_close($this->con);
+            echo "Conexión cerrada<br>";
+        } else {
+            echo "No hay conexión para cerrar<br>";
         }
     }
 }
