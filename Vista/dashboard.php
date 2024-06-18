@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['empleado'])) {
+    header("Location: ../index.php");
+    exit;
+}
+
+$empleado = $_SESSION['empleado'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,7 +102,7 @@
             <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
           </svg>
         </button>
-        <button class="app-content-headerButton">Cerrar Sesión</button>
+        <button class="app-content-headerButton"><a href="../Modelo/logout.php" style="text-decoration: none; color:white">Cerrar sesión</a></button>
       </div>
 
       <div class="app-content">

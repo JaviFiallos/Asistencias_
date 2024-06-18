@@ -1,9 +1,51 @@
 |-Controlador
-|-Entidades
-|-Modelo
+|-Entidades |
+-------------Empleado.php
+|-Modelo----|   
+------------|dto-----|
+---------------------|Empleado.dto.php
+------------|conexion.php
 |-Utiles
 |-Vista-----|
-|           |Estilos------
-|           |Interfaces---
-|           |dashboard----
-|-Index
+------------|Estilos---------
+------------|Interfaces------
+----------------------------|--asistencia.php
+----------------------------|--home.php
+----------------------------|--usuarios.php
+            |dashboard.php
+|-index.php
+|-login.php
+
+<?php
+session_start();
+
+if (!isset($_SESSION['empleado'])) {
+    header("Location: ../index.php");
+    exit;
+}
+
+// Acceder a los datos del usuario logueado
+$empleado = $_SESSION['empleado'];
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Bienvenido, <?php echo htmlspecialchars($empleado['nombre']); ?></h1>s
+   <ul>
+    <li>
+        <a href="./dashboard.php?action=home"><span>Home</span></a>
+    </li>
+    <li>
+        <a href="./dashboard.php?action=usuarios"><span>Usuarios</span></a>
+    </li>
+    <li>
+        <a href="./dashboard.php?action=asistencia"><span>Asistencia</span></a>
+    </li>
+</ul>
+</body>
+</html>

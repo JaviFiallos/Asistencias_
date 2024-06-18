@@ -16,7 +16,7 @@
     <div class="login-form">
         <h2>Sign In</h2>
         <div class="formWrapper">
-            <form>
+            <form action="login.php" method="post">
                 <div class="input-group">
                     <label for="cedula">Email :</label>
                     <div class="input-wrapper">
