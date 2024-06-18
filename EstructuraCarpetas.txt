@@ -1,0 +1,9 @@
+|-Controlador
+|-Entidades
+|-Modelo
+|-Utiles
+|-Vista-----|
+|           |Estilos------
+|           |Interfaces---
+|           |dashboard----
+|-Index
