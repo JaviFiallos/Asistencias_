@@ -2,15 +2,14 @@
     <h3>Usuarios</h3>
 </div>
 <label for="jornadas"><b>CRUD DE USUARIOS : </b></label>
-
-<ul>
-    <li>
-        <a href="./dashboard.php?action=home"><span>Home</span></a>
-    </li>
-    <li>
-        <a href="./dashboard.php?action=usuarios"><span>Usuarios</span></a>
-    </li>
-    <li>
-        <a href="./dashboard.php?action=asistencia"><span>Asistencia</span></a>
-    </li>
-</ul>
+<label>Ingrese el nombre</label>
+<label>Ingrese el apellido</label>
+<label>Ingrese el ingrese el email</label>
+<label>Ingrese el la contraseña</label>
+<label>Ingrese el rol</label>
+<label>Jornada Matinal: </label>
+<label>Jornada Hora de Ingreso: </label>
+<label>Jornada Hora de Salida: </label>
+<label>Jornada Vispertina: </label>
+<label>Jornada Hora de Ingreso: </label>
+<label>Jornada Hora de Salida: </label>

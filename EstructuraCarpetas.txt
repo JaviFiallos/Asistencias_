@@ -5,6 +5,8 @@
 ------------|dto-----|
 ---------------------|Empleado.dto.php
 ------------|conexion.php
+------------|enlaces.php
+------------|logout.php
 |-Utiles
 |-Vista-----|
 ------------|Estilos---------
@@ -15,43 +17,3 @@
             |dashboard.php
 |-index.php
 |-login.php
-
-<?php
-session_start();
-
-if (!isset($_SESSION['empleado'])) {
-    header("Location: ../index.php");
-    exit;
-}
-
-// Acceder a los datos del usuario logueado
-$empleado = $_SESSION['empleado'];
-?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
-    <h1>Bienvenido, <?php echo htmlspecialchars($empleado['nombre']); ?></h1>s
-   <ul>
-    <li>
-        <a href="./dashboard.php?action=home"><span>Home</span></a>
-    </li>
-    <li>
-        <a href="./dashboard.php?action=usuarios.php"><span>Usuarios</span></a>
-    </li>
-    <li>
-        <a href="./dashboard.php?action=asistencia.php"><span>Asistencia</span></a>
-    </li>
-        <li>
-        <a href="./dashboard.php?action=reporte_mensual.php"><span>Reporte Mensual</span></a>
-    </li>
-        <li>
-        <a href="./dashboard.php?action=reporte_semanal.php"><span>Reporte Semnal</span></a>
-    </li>
-</ul>
-</body>
-</html>
