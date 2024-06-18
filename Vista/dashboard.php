@@ -2,8 +2,8 @@
 session_start();
 
 if (!isset($_SESSION['empleado'])) {
-    header("Location: ../index.php");
-    exit;
+  header("Location: ../index.php");
+  exit;
 }
 
 $empleado = $_SESSION['empleado'];
@@ -27,36 +27,50 @@ $empleado = $_SESSION['empleado'];
     <div class="sidebar">
       <div class="sidebar-header">
         <div class="app-icon">
-        <img src="../Utiles/Imagenes/utaLogo.png" style="width:40px; height:40px">
+          <img src="../Utiles/Imagenes/utaLogo.png" style="width:40px; height:40px">
         </div>
       </div>
       <ul class="sidebar-list">
-      <li class="sidebar-list-item active">
+        <li class="sidebar-list-item active">
           <a href="./dashboard.php?action=home">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
+
             <span>Home</span>
           </a>
         </li>
         <li class="sidebar-list-item">
+          <a href="./dashboard.php?action=asistencia">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>Registro Asistencia</span>
+          </a>
+        </li>
+        <?php if ($empleado['rol'] === 'ADMIN') { ?>
+        <li class="sidebar-list-item">
           <a href="./dashboard.php?action=usuarios">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
             </svg>
             <span>Usuarios</span>
           </a>
         </li>
         <li class="sidebar-list-item">
-          <a href="./dashboard.php?action=asistencia">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart">
-              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-              <path d="M22 12A10 10 0 0 0 12 2v10z" />
+          <a href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
-            <span>Registro Asistencia</span>
+            <span>Horarios Docentes</span>
           </a>
         </li>
         <li class="sidebar-list-item">
@@ -70,19 +84,20 @@ $empleado = $_SESSION['empleado'];
         </li>
         <li class="sidebar-list-item">
           <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+              <path d="M22 12A10 10 0 0 0 12 2v10z" />
             </svg>
             <span>Reporte Mensual</span>
           </a>
         </li>
+        <?php } ?>
       </ul>
       <div class="account-info">
         <div class="account-info-picture">
           <img src="../Utiles/Imagenes/statusGreen.png" alt="Account" style="width:20px; height:20px">
         </div>
-        <div class="account-info-name" style="padding-bottom: 10px;">Admin</div>
+        <div class="account-info-name" style="padding-bottom: 10px;"><p><?php echo htmlspecialchars($empleado['rol']); ?></p></div>
         <button class="account-info-more">
           <!--Aqui ira la -->
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal">
@@ -110,7 +125,7 @@ $empleado = $_SESSION['empleado'];
         include_once '../Controlador/controlador.php';
         include_once  '../Modelo/enlaces.php';
         $mvc = new Controller();
-        $mvc ->enlacesPaginasController();
+        $mvc->enlacesPaginasController();
         ?>
       </div>
 

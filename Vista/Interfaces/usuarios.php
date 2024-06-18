@@ -11,6 +11,6 @@
         <a href="./dashboard.php?action=usuarios"><span>Usuarios</span></a>
     </li>
     <li>
-        <aa href="./dashboard.php?action=asistencia"><span>Asistencia</span></a>
+        <a href="./dashboard.php?action=asistencia"><span>Asistencia</span></a>
     </li>
 </ul>

@@ -41,10 +41,16 @@ $empleado = $_SESSION['empleado'];
         <a href="./dashboard.php?action=home"><span>Home</span></a>
     </li>
     <li>
-        <a href="./dashboard.php?action=usuarios"><span>Usuarios</span></a>
+        <a href="./dashboard.php?action=usuarios.php"><span>Usuarios</span></a>
     </li>
     <li>
-        <a href="./dashboard.php?action=asistencia"><span>Asistencia</span></a>
+        <a href="./dashboard.php?action=asistencia.php"><span>Asistencia</span></a>
+    </li>
+        <li>
+        <a href="./dashboard.php?action=reporte_mensual.php"><span>Reporte Mensual</span></a>
+    </li>
+        <li>
+        <a href="./dashboard.php?action=reporte_semanal.php"><span>Reporte Semnal</span></a>
     </li>
 </ul>
 </body>
