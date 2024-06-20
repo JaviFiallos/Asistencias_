@@ -9,7 +9,7 @@ class Conexion {
 
     public function conectar() {
         try {
-            $this->con = mysqli_connect("localhost", "root", "1805162433", "asistencia");
+            $this->con = mysqli_connect("localhost", "root", "", "asistencia");
 
             if (!$this->con) {
                 throw new Exception("Error en la conexión: " . mysqli_connect_error());
