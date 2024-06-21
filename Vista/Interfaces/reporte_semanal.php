@@ -3,7 +3,11 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <form action="" method="POST">
+        <form action="Interfaces/RS.php" method="POST">
+            <div class="mb-3">
+                <label for="cedula" class="form-label">Ingrese la Cedula del Empleado a Reportar</label>
+                <input type="text" class="form-control" id="cedula" name="cedula">
+            </div>
             <div class="mb-3">
                 <label for="semana" class="form-label">Seleccione la Semana</label>
                 <input type="week" class="form-control" id="semana" name="semana">

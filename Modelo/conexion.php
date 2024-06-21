@@ -16,6 +16,7 @@ class Conexion {
             }
 
             echo "Se conectó exitosamente<br>";
+            return $this->con;
         } catch (Exception $e) {
             echo "Excepción capturada: " . $e->getMessage() . "<br>";
         }
