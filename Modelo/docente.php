@@ -1,5 +1,4 @@
 <?php
-
 include '../modelo/Conexion.php';
 $conexion = new Conexion();
 $conexion->conectar();
@@ -22,15 +21,14 @@ if ($respuesta->num_rows > 0) {
         $resultado .= "<td>{$fila['Rol']}</td>";
         $resultado .= "<td>";
         $resultado .= "<a href='#editEmployeeModal' class='edit' data-toggle='modal'><i class='material-icons' data-toggle='tooltip' title='Editar'>&#xE254;</i></a>";
-        $resultado .= "<a href='#deleteEmployeeModal' class='delete' data-toggle='modal'><i class='material-icons' data-toggle='tooltip' title='Eliminar'>&#xE872;</i></a>";
+        $resultado .= "<a href='#deleteEmployeeModal' class='delete' data-toggle='modal' data-id='{$fila['Cedula']}'><i class='material-icons' data-toggle='tooltip' title='Eliminar'>&#xE872;</i></a>";
         $resultado .= "</td>";
         $resultado .= "</tr>";
         $contador++;
     }
 } else {
-    $resultado = "<tr><td colspan='6'>No hay empleados registrados</td></tr>";
+    $resultado = "<tr><td colspan='7'>No hay empleados registrados</td></tr>";
 }
 
 echo $resultado;
-
 ?>

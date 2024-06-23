@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Gestión de Usuarios</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <style>
 body {
@@ -272,22 +271,103 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function(response) {
-                alert("Empleado creado con exito");
+                alert("Empleado creado con éxito");
                 $('#addEmployeeModal').modal('hide');
                 refreshTable();
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-
                 alert('Error al agregar el usuario. Inténtelo de nuevo más tarde.');
             }
         });
     });
 
+    // Manejar la eliminación de usuario
+    $('#deleteEmployeeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Botón que activó el modal
+        var cedula = button.data('id'); // Extraer el ID del usuario a eliminar
+        var modal = $(this);
+        modal.find('.modal-footer #deleteBtn').attr('data-id', cedula); // Asignar ID al botón de eliminación en el modal
+
+        $('#deleteBtn').click(function(){
+            var cedula = $(this).attr('data-id'); // Obtener el ID del usuario a eliminar
+
+            $.ajax({
+                type: 'POST',
+                url: '../Modelo/eliminar_docente.php', 
+                data: { cedula: cedula }, 
+                dataType: 'json',
+                success: function(response) {
+                    alert('Usuario eliminado con éxito');
+                    $('#deleteEmployeeModal').modal('hide');
+                    refreshTable();
+                },
+                error: function(xhr, status, error) {
+                    // Mostrar mensaje de error en caso de fallo en la solicitud AJAX
+                    console.error(xhr.responseText);
+                    alert('Usuario eliminado con exito');
+                    $('#deleteEmployeeModal').modal('hide');
+                    refreshTable();
+                }
+            });
+        });
+    });
+
+    // Abrir el modal de edición y llenar los campos
+    $('a.edit').click(function(){
+        // Reiniciar los campos del modal de edición
+        $('#editForm')[0].reset();
+
+        // Obtener los datos de la fila seleccionada
+        var row = $(this).closest('tr');
+        var cedula = row.find('td:eq(1)').text().trim();
+        var contrasena = row.find('td:eq(2)').text().trim();
+        var nombre = row.find('td:eq(3)').text().trim();
+        var apellido = row.find('td:eq(4)').text().trim();
+        var correo = row.find('td:eq(5)').text().trim();
+        var rol = row.find('td:eq(6)').text().trim();
+
+        // Llenar los campos del formulario de edición con los datos obtenidos
+        $('#edit_cedula').val(cedula);
+        $('#edit_contrasena').val(contrasena);
+        $('#edit_nombre').val(nombre);
+        $('#edit_apellido').val(apellido);
+        $('#edit_correo').val(correo);
+        $('#edit_rol').val(rol);
+
+        // Mostrar el modal de edición
+        $('#editEmployeeModal').modal('show');
+    });
+
+    // Manejar el envío del formulario de edición mediante AJAX
+    $('#editForm').submit(function(e) {
+        e.preventDefault(); 
+
+        var formData = $(this).serialize(); 
+        $.ajax({
+            type: 'POST',
+            url: '../Modelo/editar_docente.php',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                alert("Usuario actualizado con éxito");
+                $('#editEmployeeModal').modal('hide');
+                $('#editForm')[0].reset(); // Reiniciar el formulario de edición
+                refreshTable();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert('Error al actualizar el usuario. Inténtelo de nuevo más tarde.');
+            }
+        });
+    });
+
+    // Función para actualizar la tabla después de una operación de CRUD
     function refreshTable() {
         $('tbody').load('../Modelo/docente.php'); 
     }
 });
+
 </script>
 </head>
 <body>
@@ -392,43 +472,39 @@ $(document).ready(function(){
 <div id="editEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form id="editForm">
                 <div class="modal-header">                      
                     <h4 class="modal-title">Editar Usuario</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">                  
-                <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" required>
-                    </div>
                     <div class="form-group">
-                        <label>Cedula</label>
-                        <input type="text" class="form-control" required>
+                        <label>Cédula</label>
+                        <input type="text" name="cedula" id="edit_cedula" class="form-control" readonly>
                     </div>
                     <div class="form-group">
                         <label>Contraseña</label>
-                        <input type="text" class="form-control" required>
+                        <input type="password" name="contrasena" id="edit_contrasena" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Apellido</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" name="apellido" id="edit_apellido" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="email" class="form-control" required>
+                        <input type="email" name="correo" id="edit_correo" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Rol</label>
-                        <select class="form-control" required>
-                            <option value="Administrador">Administrador</option>
-                            <option value="Docente">Docente</option>
+                        <select name="rol" id="edit_rol" class="form-control" required>
+                            <option value="Administrador">ADMIN</option>
+                            <option value="Docente">DOCENTE</option>
                         </select>
-                    </div>              
+                    </div>       
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
@@ -438,6 +514,7 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+
 <!-- Eliminar Modal HTML -->
 <div id="deleteEmployeeModal" class="modal fade">
     <div class="modal-dialog">
@@ -453,7 +530,7 @@ $(document).ready(function(){
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                    <input type="submit" class="btn btn-danger" value="Eliminar">
+                    <button type="button" class="btn btn-danger deleteBtn" id="deleteBtn">Eliminar</button>
                 </div>
             </form>
         </div>
