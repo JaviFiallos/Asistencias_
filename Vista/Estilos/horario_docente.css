@@ -1,0 +1,122 @@
+.container {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+    text-align: center;
+}
+
+.container h1 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+}
+
+.container h4 {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
+.titulo-jornada {
+    margin-top: 1px;
+    text-align: center;
+    margin-right: 10.7cm;
+}
+
+.boton-morado {
+    background-color: #9b59b6;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-left: 50px; /* Espacio entre los botones */
+}
+
+.boton-morado:hover {
+    background-color: #8e44ad;
+}
+
+.boton-secundario {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 50px; /* Espacio entre los botones */
+}
+
+.boton-tercero {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 50px; /* Espacio entre los botones */
+}
+
+.boton-secundario:hover {
+    background-color: #2980b9;
+}
+
+input[type="text"] {
+    margin-top: 10px;
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    background-color: #9b59b6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #8e44ad;
+}
+
+form {
+    margin-top: 10px;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+.formulario-jornada label {
+    margin-right: 50px; /* Espacio entre la etiqueta y el input */
+}
+
+.titulo-seleccion {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: -300px;
+}
+
+input[type="time"] {
+    width: 168px; /* Ajusta el ancho según tus necesidades */
+    padding: 8px; /* Ajusta el espaciado interno */
+    font-size: 16px; /* Ajusta el tamaño del texto */
+    border: 1px solid #ccc; /* Borde con color gris claro */
+    border-radius: 5px; /* Esquinas redondeadas */
+}
