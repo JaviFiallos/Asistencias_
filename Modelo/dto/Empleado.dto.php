@@ -13,6 +13,10 @@ class Empleadodto {
     }
 
     public function iniciarSesion($cedula, $contra) {
+        if ($this->conect === null) {
+            echo("Error: No se pudo conectar a la base de datos.");
+            exit;
+        }
         $query = "SELECT * FROM empleados 
                   WHERE CED_EMP = ? AND PASS_EMP = ?";
         $stmt = $this->conect->prepare($query);
