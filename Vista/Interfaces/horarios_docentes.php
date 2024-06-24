@@ -60,11 +60,12 @@
     <div id="resultado_busqueda"></div>
 
     <form method="POST" action="../Modelo/guardar_horarios.php">
-          <label for="docente">Buscar Docente:</label>
+        <label for="docente">Buscar Docente:</label>
         <input type="text" id="ROL_EMP" name="ROL_EMP" required>
-        <input type="submit" value="Buscar" class="boton-morado">
+        <input type="submit" name="action" value="Buscar" class="boton-morado">
+        
         <h4 class="titulo-jornada">Jornada matutina:</h4>
-        <input type="hidden" name="ID_EMP" id="input_id" >
+        <input type="hidden" name="ID_EMP" id="input_id">
         <div class="formulario-jornada">
             <label for="hora_inicio_matutina">Desde:</label>
             <input type="time" id="hora_inicio_matutina" name="hora_inicio_matutina" min="07:00" max="13:00" required>
@@ -77,15 +78,16 @@
             <label for="hora_inicio_vespertina">Desde:</label>
             <input type="time" id="hora_inicio_vespertina" name="hora_inicio_vespertina" min="14:00" max="20:00" required>
             <label for="hora_fin_vespertina">Hasta:</label>
-            <input type="time" id="hora_fin_vespertina" name="hora_fin_vespertina"  min="14:00" max="20:00" required><br>
+            <input type="time" id="hora_fin_vespertina" name="hora_fin_vespertina" min="14:00" max="20:00" required><br>
         </div>
         
         <div class="boton-container"> 
-            <input type="submit" value="Eliminar" class="boton-secundario">
-            <input type="submit" value="Editar" class="boton-tercero">
-            <input type="submit" value="Asignar" class="boton-morado">
+            <input type="submit" name="action" value="Eliminar" class="boton-secundario">
+            <input type="submit" name="action" value="Editar" class="boton-tercero">
+            <input type="submit" name="action" value="Asignar" class="boton-morado">
         </div>
     </form>
+
 
 </div>
 
