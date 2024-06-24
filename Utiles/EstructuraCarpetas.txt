@@ -1,0 +1,19 @@
+|-Controlador
+|-Entidades |
+-------------Empleado.php
+|-Modelo----|   
+------------|dto-----|
+---------------------|Empleado.dto.php
+------------|conexion.php
+------------|enlaces.php
+------------|logout.php
+|-Utiles
+|-Vista-----|
+------------|Estilos---------
+------------|Interfaces------
+----------------------------|--asistencia.php
+----------------------------|--home.php
+----------------------------|--usuarios.php
+            |dashboard.php
+|-index.php
+|-login.php
