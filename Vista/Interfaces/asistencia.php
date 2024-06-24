@@ -148,8 +148,8 @@ include '../Modelo/selectHorario.php';
         $('#registrarIngresoMatutino').on('click', function() {
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
-                //let horaIngreso = datetime.time;
-                let horaIngreso = "07:58:00";
+                let horaIngreso = datetime.time;
+                //let horaIngreso = "07:58:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let jornada = 'MATUTINA';
@@ -177,8 +177,8 @@ include '../Modelo/selectHorario.php';
         $('#registrarSalidaMatutino').on('click', function() {
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
-                //let horaRegistroDeSalida = datetime.time;
-                let horaRegistroDeSalida = "13:15:00";
+                let horaRegistroDeSalida = datetime.time;
+                //let horaRegistroDeSalida = "13:15:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let horaEntrada = <?php echo json_encode($entradaMatutino); ?>;
@@ -212,8 +212,8 @@ include '../Modelo/selectHorario.php';
         $('#registrarIngresoVespertino').on('click', function() {
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
-                //let horaIngreso = datetime.time;
-                let horaIngreso = "17:02:00";
+                let horaIngreso = datetime.time;
+                //let horaIngreso = "17:02:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let jornada = 'VESPERTINA';
@@ -241,8 +241,8 @@ include '../Modelo/selectHorario.php';
         $('#registrarSalidaVespertino').on('click', function() {
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
-                //let horaRegistroDeSalida = datetime.time;
-                let horaRegistroDeSalida = "20:15:00";
+                let horaRegistroDeSalida = datetime.time;
+                //let horaRegistroDeSalida = "20:15:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let horaEntrada = <?php echo json_encode($entradaVespertino); ?>;

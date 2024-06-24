@@ -2,7 +2,7 @@
 // Obtener la hora actual
 date_default_timezone_set('America/Guayaquil');
 $hora_actual = date("H:i:s");
-$hora_actual = "20:31:00";
+//$hora_actual = "20:15:00";
 $hora_actual_dt = new DateTime($hora_actual);
 $entradaMatutino_dt = new DateTime($entradaMatutino);
 $salidaMatutino_dt = new DateTime($salidaMatutino);

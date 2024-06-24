@@ -11,7 +11,7 @@ if ($con) {
     // Obtener la fecha actual
     date_default_timezone_set('America/Guayaquil');
     $fecha_actual = date("Y-m-d");
-    echo json_encode($fecha_actual);
+    
 
     // Consulta para obtener los registros de asistencia del día actual
     $queryRegistros = "SELECT FECHA, JORNADA, HORA_INGRESO, HORA_SALIDA, DESCUENTO, HORAS_POR_JORNADA, SUBTOTAL_JORNADA FROM registro_asistencia WHERE ID_EMP_PER = ? AND FECHA = ?";

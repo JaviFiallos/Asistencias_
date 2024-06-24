@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Calcular subtotal jornada en base a las horas trabajadas
             $subtotalJornada = ($horasTrabajadas + $minutosTrabajados / 60) * $tasaPorHora;
         }
+        $subtotalJornada -= $descuento;
     }
 
     // Actualizar el registro de asistencia con los cálculos
