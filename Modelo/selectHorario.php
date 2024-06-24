@@ -46,7 +46,7 @@ foreach ($horarioMatutino as $horario) {
     $jornadaMatutino = $horario["JORNADA"];
     $entradaMatutino = $horario["ENTRADA"];
     $salidaMatutino = $horario["SALIDA"];
-    //$salidaMatutino = "12:00:00";  Simmulado
+    
 }
 // jornana vespertina
 foreach ($horarioVespertino as $horario) {

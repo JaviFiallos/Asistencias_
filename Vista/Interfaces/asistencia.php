@@ -46,6 +46,13 @@ include '../Modelo/selectHorario.php';
 <?php include '../Modelo/selectRegister.php'; ?>
 <?php include '../Modelo/getTime.php'; ?>
 
+<?php
+$horaDeSalida = "00:00:00";
+foreach ($registros as $registro) {
+    $horaDeSalida = $registro['HORA_SALIDA'];
+}
+?>
+
 <!-- Contenedor flexible para iframe y texto -->
 <div class="container mt-1">
     <div class="d-flex justify-content-between align-items-center p-1 border">
@@ -59,18 +66,26 @@ include '../Modelo/selectHorario.php';
                 if (!$matutinoRegistrado) {
                     echo '<button id="registrarIngresoMatutino" class="btn btn-primary mt-3 p-3">Registrar Ingreso</button>';
                 } elseif ($hora_actual_dt >= $salidaMatutinoMargin && $hora_actual_dt <= $salidaMatutinoMarginR  && $matutinoSalidaRegistrada !== null) {
-                    echo '<button id="registrarSalidaMatutino" class="btn btn-primary mt-3 p-3">Registrar Salida</button>';
+                    if ($hora_actual_dt >= $salidaMatutinoMargin && $hora_actual_dt <= $salidaMatutinoMarginR  && $horaDeSalida > "00:00:00") {
+                        echo '<p class="bg-danger bg-opacity-25">Ya se ha registrado la salida</p>';
+                    } else {
+                        echo '<button id="registrarSalidaMatutino" class="btn btn-primary mt-3 p-3">Registrar Salida</button>';
+                    }
                 } else {
-                    echo '<p>Ya se ha registrado el ingreso</p>';
+                    echo '<p class="bg-danger bg-opacity-25">Ya se ha registrado el ingreso</p>';
                 }
             } elseif ($hora_actual_dt >= $entradaVespertinoMargin && $hora_actual_dt <= $salidaVespertinoMarginR) {
                 echo "<p>Jornada En Curso: <strong>VESPERTINA</strong></p>";
                 if (!$vespertinoRegistrado) {
                     echo '<button id="registrarIngresoVespertino" class="btn btn-primary mt-3 p-3">Registrar Ingreso</button>';
                 } elseif ($hora_actual_dt >= $salidaVespertinoMargin  && $hora_actual_dt <= $salidaVespertinoMarginR  && $vespertinoSalidaRegistrada !== null) {
-                    echo '<button id="registrarSalidaVespertino" class="btn btn-primary mt-3 p-3">Registrar Salida</button>';
+                    if ($hora_actual_dt >= $salidaVespertinoMargin  && $hora_actual_dt <= $salidaVespertinoMarginR && $horaDeSalida > "00:00:00") {
+                        echo '<p class="bg-danger bg-opacity-25">Ya se ha registrado la salida</p>';
+                    } else {
+                        echo '<button id="registrarSalidaVespertino" class="btn btn-primary mt-3 p-3">Registrar Salida</button>';
+                    }
                 } else {
-                    echo '<p>Ya se ha registrado el ingreso</p>';
+                    echo '<p class="bg-danger bg-opacity-25">Ya se ha registrado el ingreso</p>';
                 }
             } else {
                 echo "<p>Jornada En Curso: <strong>Fuera de Horario</strong></p>";
@@ -149,7 +164,7 @@ include '../Modelo/selectHorario.php';
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
                 let horaIngreso = datetime.time;
-                //let horaIngreso = "07:58:00";
+                //let horaIngreso = "10:58:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let jornada = 'MATUTINA';
@@ -213,7 +228,7 @@ include '../Modelo/selectHorario.php';
             getCurrentDateTime(function(datetime) {
                 let fecha = datetime.date;
                 let horaIngreso = datetime.time;
-                //let horaIngreso = "17:02:00";
+                //let horaIngreso = "14:05:00";
 
                 let idEmpPer = <?php echo json_encode($empleadoId); ?>;
                 let jornada = 'VESPERTINA';
