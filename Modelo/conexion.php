@@ -29,7 +29,6 @@ class Conexion {
     public function cerrarConexion() {
         if ($this->con) {
             mysqli_close($this->con);
-           /* echo "Conexión cerrada<br>";*/
         } else {
             echo "No hay conexión para cerrar<br>";
         }

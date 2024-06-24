@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($empleado!=null) {
         $_SESSION['empleado'] = [
-            'id' => $empleado->$id,
+            //'id' => $empleado->$id,
+            'id' => $empleado->getId(),
             'cedula' => $empleado->getCedula(),
             'nombre' => $empleado->getNombre(),
             'apellido' => $empleado->getApellido(),
