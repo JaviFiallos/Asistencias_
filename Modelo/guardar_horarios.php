@@ -265,7 +265,7 @@ function editarHorarios() {
                 // Insertar horario matutino si existe
                 if (!empty($hora_inicio_matutina) && !empty($hora_fin_matutina)) {
                     $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, ?, ?)");
-                    $jornadaMatutina = 'Matutina';
+                    $jornadaMatutina = 'MATUTINA';
                     $stmt->bind_param("sssi", $hora_inicio_matutina, $hora_fin_matutina, $jornadaMatutina, $id_empleado);
                     if ($stmt->execute()) {
                         $response['status'] = 'success';
@@ -280,7 +280,7 @@ function editarHorarios() {
                 // Insertar horario vespertino si existe
                 if (!empty($hora_inicio_vespertina) && !empty($hora_fin_vespertina)) {
                     $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, ?, ?)");
-                    $jornadaVespertina = 'Vespertina';
+                    $jornadaVespertina = 'VESPERTINA';
                     $stmt->bind_param("sssi", $hora_inicio_vespertina, $hora_fin_vespertina, $jornadaVespertina, $id_empleado);
                     if ($stmt->execute()) {
                         $response['status'] = 'success';
