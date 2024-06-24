@@ -1,7 +1,7 @@
 <?php
 include '../Modelo/conexion.php'; // Asegúrate de que la ruta sea correcta
 $obj = new Conexion();
-$obj->conectar(); 
+$obj->conectar();
 $con = $obj->getConexion();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $duracionJornada = $horaEntrada_dt->diff($horaSalida_dt);
         $horasJornadaPlaneada = $duracionJornada->h; // Horas de jornada planeada
         $minutosJornadaPlaneada = $duracionJornada->i; // Minutos de jornada planeada
-        
+
         // Calcular minutos de atraso en ingreso
         $horaRegistroDeIngreso_dt = new DateTime($horaRegistroDeIngreso);
         $intervaloIngreso = $horaEntrada_dt->diff($horaRegistroDeIngreso_dt);
@@ -37,36 +37,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $horasTrabajadas = $intervaloSalida->h; // Horas trabajadas
         $minutosTrabajados = $intervaloSalida->i; // Minutos trabajados
 
-        // Calcular descuento por minutos de atraso en ingreso
-        if ($minutosAtrasadosIngreso > 0) {
-            $descuento = $minutosAtrasadosIngreso * $descuentoPorMinuto;
-        }
-        
-        // Verificar si no hubo atraso y ajustar las horas y subtotal
+        // Verificar si no hubo atraso
         if ($horaRegistroDeIngreso_dt <= $horaEntrada_dt) {
             $descuento = 0.00;
+            $horasTrabajadasReales = $horasJornadaPlaneada;
+            $minutosTrabajadosReales = $minutosJornadaPlaneada;
+        } else {
+            // Calcular descuento por minutos de atraso en ingreso
+            $descuento = $minutosAtrasadosIngreso * $descuentoPorMinuto;
+
+            // Ajustar la jornada planeada por los minutos de atraso
+            $totalMinutosJornadaPlaneada = ($horasJornadaPlaneada * 60) + $minutosJornadaPlaneada;
+            $minutosJornadaReales = $totalMinutosJornadaPlaneada - $minutosAtrasadosIngreso;
+            $horasJornadaReales = floor($minutosJornadaReales / 60);
+            $minutosJornadaReales = $minutosJornadaReales % 60;
+
+            $horasTrabajadasReales = $horasJornadaReales;
+            $minutosTrabajadosReales = $minutosJornadaReales;
+        }
+        if ($descuento > 0) {
+            $subtotalJornada = ($horasJornadaPlaneada * $tasaPorHora) - $descuento;
+        } else {
+            $subtotalJornada = $horasJornadaPlaneada * $tasaPorHora;
         }
 
-        // Verificar si se trabajaron más horas de las planeadas y ajustar el subtotal
-        if ($horaRegistroDeSalida_dt >= $horaSalida_dt) {
-            $horasTrabajadas = $horasJornadaPlaneada;
-            $minutosTrabajados = 0;
-            $subtotalJornada = $horasJornadaPlaneada * $tasaPorHora;
-        } else {
-            // Calcular subtotal jornada en base a las horas trabajadas
-            $subtotalJornada = ($horasTrabajadas + $minutosTrabajados / 60) * $tasaPorHora;
-        }
-        $subtotalJornada -= $descuento;
+        // Restar el descuento del subtotal de la jornada si hay descuento
+        //$subtotalJornada -= $descuento;
     }
 
     // Actualizar el registro de asistencia con los cálculos
     $sql = "UPDATE registro_asistencia 
             SET HORA_SALIDA = '$horaRegistroDeSalida', 
                 DESCUENTO = '$descuento', 
-                HORAS_POR_JORNADA = '$horasTrabajadas:$minutosTrabajados', 
+                HORAS_POR_JORNADA = '$horasTrabajadasReales:$minutosTrabajadosReales', 
                 SUBTOTAL_JORNADA = '$subtotalJornada' 
             WHERE ID_EMP_PER = '$idEmpPer' AND FECHA = '$fecha' AND JORNADA = '$jornada'";
-    
+
     if ($con) {
         if ($con->query($sql) === TRUE) {
             echo "Registro de salida actualizado correctamente";
@@ -79,4 +85,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $obj->cerrarConexion();
 }
-?>

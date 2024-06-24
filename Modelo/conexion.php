@@ -15,7 +15,7 @@ class Conexion {
                 throw new Exception("Error en la conexión: " . mysqli_connect_error());
             }
 
-            echo "Se conectó exitosamente<br>";
+            //echo "Se conectó exitosamente<br>";
             return $this->con;
         } catch (Exception $e) {
             echo "Excepción capturada: " . $e->getMessage() . "<br>";
