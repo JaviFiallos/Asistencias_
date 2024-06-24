@@ -10,6 +10,14 @@ $cedula = $_POST['cedula'];
 $fechaInicio = $_POST['fechaInicio'];
 $fechaFin = $_POST['fechaFin'];
 
+$fechaFinObj = new DateTime($fechaFin);
+
+// Restar 2 días
+$fechaFinObj->modify('-2 days');
+
+// Obtener la fecha modificada en el mismo formato 'YYYY-MM-DD'
+$fechaFinModificada = $fechaFinObj->format('Y-m-d');
+
 $sumaDescuentos = 0;
 $sumaSubtotal = 0;
 $totalHoras = new DateTime('00:00:00'); // Inicializar el total de horas trabajadas
@@ -55,32 +63,11 @@ if ($result->num_rows > 0) {
         $sumaDescuentos += $row['DESCUENTO'];
         $sumaSubtotal += $row['SUBTOTAL_JORNADA'];
 
-        // Sumar las horas trabajadas
-        $horasTrabajadas = new DateTime($row['HORAS_POR_JORNADA']);
-        $totalHoras->add(new DateInterval('PT' . $horasTrabajadas->format('H') . 'H' . $horasTrabajadas->format('i') . 'M'));
     }
 
-    // Formatear el total de horas trabajadas
-    $totalHorasTrabajadas = $totalHoras->format('H:i');
-
-    // Calcular descuentos y subtotales adicionales según las condiciones especificadas
-    $totalHorasTrabajadasDecimal = ($totalHoras->format('H') * 60 + $totalHoras->format('i')) / 60; // Convertir total de horas trabajadas a decimal
-    $expectedHoursPerWeek = 40;
-    $hourlyRate = 8;
-    $minuteDelayRate = 0.25 / 60; // Convertir ctv por minuto de retraso a dólares por minuto
-
-    $lateMinutes = $sumaDescuentos * 4; // 0.25 ctv por minuto de retraso
-    $missingHours = max(0, $expectedHoursPerWeek - $totalHorasTrabajadasDecimal);
-    $penaltyForMissingHours = $missingHours * $hourlyRate;
-
-    $subtotalSemana = $totalHorasTrabajadasDecimal * $hourlyRate;
-    $totalDescuentos = $lateMinutes * $minuteDelayRate + $penaltyForMissingHours;
-
-    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . number_format($totalDescuentos, 2));
+    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . $sumaDescuentos);
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Horas Trabajadas Esta Semana: ' . $totalHorasTrabajadas);
-    $pdf->Ln();
-    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . number_format($subtotalSemana, 2));
+    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . $sumaSubtotal);
     ob_end_clean();
     $pdf->Output();
 } else {
