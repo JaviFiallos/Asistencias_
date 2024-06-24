@@ -71,9 +71,9 @@ if ($result->num_rows > 0) {
     }
 
     // Mostrar el total de descuentos y subtotal del mes
-    $pdf->Cell(50, 10, 'Descuento Este Mes: $' . $sumaDescuentos, 1);
+    $pdf->Cell(55, 10, 'Descuento Este Mes: $' . $sumaDescuentos, 1);
     $pdf->Ln();
-    $pdf->Cell(50, 10, 'Subtotal Este Mes: $' . $sumaSubtotal, 1);
+    $pdf->Cell(55, 10, 'Subtotal Este Mes: $' . $sumaSubtotal, 1);
 
     ob_end_clean(); // Limpiar el buffer de salida antes de enviar el PDF
 
