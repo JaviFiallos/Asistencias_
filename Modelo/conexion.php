@@ -9,13 +9,14 @@ class Conexion {
 
     public function conectar() {
         try {
-            $this->con = mysqli_connect("localhost:33065", "root", "", "asistencia");
+            $this->con = mysqli_connect("localhost", "root", "", "asistencia");
 
             if (!$this->con) {
                 throw new Exception("Error en la conexión: " . mysqli_connect_error());
             }
 
-            /*echo "Se conectó exitosamente<br>";*/
+            echo "Se conectó exitosamente<br>";
+            return $this->con;
         } catch (Exception $e) {
             echo "Excepción capturada: " . $e->getMessage() . "<br>";
         }
