@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
     <script>
        $(document).ready(function() {
+        var idEmpleado;
         $('#ROL_EMP').on('input', function() {
             var searchKeyword = $(this).val().trim();
 
@@ -24,7 +25,7 @@
                         if (response.length > 0) {
                             response.forEach(function(persona) {
                                 var nombreCompleto = persona.nombre + ' ' + persona.apellido;
-                                var idEmpleado = persona.id; // Obtener el ID_EMP del docente
+                                idEmpleado = persona.id; // Obtener el ID_EMP del docente
 
                                 $('#resultado_busqueda').append('<div class="nombre-docente" data-id="' + idEmpleado + '">' + nombreCompleto + '</div>');
                             });
@@ -62,10 +63,15 @@
     <form method="POST" action="../Modelo/guardar_horarios.php">
         <label for="docente">Buscar Docente:</label>
         <input type="text" id="ROL_EMP" name="ROL_EMP" required>
-        <input type="submit" name="action" value="Buscar" class="boton-morado">
+        <?php
+            // Supongamos que tienes el valor antiguo en esta variable
+            $oldValue = isset($_POST['ID_EMP']) ? $_POST['ID_EMP'] : ''; // o cualquier otro origen de datos
+        ?>
+        <input type="text" name="ID_EMP" id="input_id" <?php if(!empty($oldValue)) echo 'value="' . htmlspecialchars($oldValue) . '"'; ?> required>
+
+
         
         <h4 class="titulo-jornada">Jornada matutina:</h4>
-        <input type="hidden" name="ID_EMP" id="input_id">
         <div class="formulario-jornada">
             <label for="hora_inicio_matutina">Desde:</label>
             <input type="time" id="hora_inicio_matutina" name="hora_inicio_matutina" min="07:00" max="13:00" required>
@@ -87,14 +93,14 @@
             <input type="submit" name="action" value="Asignar" class="boton-morado">
         </div>
     </form>
-
+    <?php
+        if (isset($_GET['mensaje'])) {
+            $mensaje = htmlspecialchars($_GET['mensaje'], ENT_QUOTES, 'UTF-8');
+            echo '<div><p>' . $mensaje . '</p></div>';
+        }
+    ?>
 
 </div>
 
 </body>
 </html>
-
-
-    
-    
-
