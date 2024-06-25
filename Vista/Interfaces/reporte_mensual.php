@@ -5,10 +5,6 @@
     <div class="card-body">
         <form id="reporteForm" action="../Modelo/RM.php" method="POST" target="_blank">
             <div class="mb-3">
-                <label for="cedula" class="form-label">Ingrese la Cedula del Empleado a Reportar</label>
-                <input type="text" class="form-control" id="cedula" name="cedula">
-            </div>
-            <div class="mb-3">
                 <label for="mes" class="form-label">Seleccione el Mes</label>
                 <input type="month" class="form-control" id="mes" name="mes">
                 <!-- Campos ocultos para la fecha de inicio y fin del mes -->
@@ -56,7 +52,7 @@
         // Deja que el formulario se envíe
         setTimeout(function() {
             // Vaciar los campos después de enviar el formulario
-            document.getElementById('cedula').value = '';
+
             document.getElementById('mes').value = '';
             document.getElementById('fechaInicio').value = '';
             document.getElementById('fechaFin').value = '';
@@ -65,7 +61,6 @@
 
     // Limpiar los campos cuando la página se carga de nuevo
     window.addEventListener('load', function() {
-        document.getElementById('cedula').value = '';
         document.getElementById('mes').value = '';
         document.getElementById('fechaInicio').value = '';
         document.getElementById('fechaFin').value = '';
