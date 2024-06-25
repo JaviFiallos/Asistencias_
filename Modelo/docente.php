@@ -1,34 +1,48 @@
 <?php
-include '../modelo/Conexion.php';
-$conexion = new Conexion();
-$conexion->conectar();
-$conn = $conexion->getConexion();
+include '../Modelo/conexion.php'; // Asegúrate de que la ruta sea correcta
+$obj = new Conexion();
+$con = $obj->conectar();
 
-$sqlSelect = "SELECT CED_EMP AS Cedula, PASS_EMP AS Contraseña, NOM_EMP AS Nombre, APE_EMP AS Apellido, CORR_EMP AS Correo, ROL_EMP AS Rol FROM empleados";
-$respuesta = $conn->query($sqlSelect);
-
-$resultado = "";
-if ($respuesta->num_rows > 0) {
-    $contador = 1;
-    while ($fila = $respuesta->fetch_assoc()) {
-        $resultado .= "<tr>";
-        $resultado .= "<td><span class='custom-checkbox'><input type='checkbox' id='checkbox{$contador}' name='options[]' value='{$fila['Cedula']}'><label for='checkbox{$contador}'></label></span></td>";
-        $resultado .= "<td>{$fila['Cedula']}</td>";
-        $resultado .= "<td>{$fila['Contraseña']}</td>";
-        $resultado .= "<td>{$fila['Nombre']}</td>";
-        $resultado .= "<td>{$fila['Apellido']}</td>";
-        $resultado .= "<td>{$fila['Correo']}</td>";
-        $resultado .= "<td>{$fila['Rol']}</td>";
-        $resultado .= "<td>";
-        $resultado .= "<a href='#editEmployeeModal' class='edit' data-toggle='modal'><i class='material-icons' data-toggle='tooltip' title='Editar'>&#xE254;</i></a>";
-        $resultado .= "<a href='#deleteEmployeeModal' class='delete' data-toggle='modal' data-id='{$fila['Cedula']}'><i class='material-icons' data-toggle='tooltip' title='Eliminar'>&#xE872;</i></a>";
-        $resultado .= "</td>";
-        $resultado .= "</tr>";
-        $contador++;
-    }
-} else {
-    $resultado = "<tr><td colspan='7'>No hay empleados registrados</td></tr>";
+if (!$con) {
+    // Si la conexión no se establece correctamente
+    echo json_encode(array('error' => 'Error en la conexión a la base de datos'));
+    exit;
 }
 
-echo $resultado;
+// Consulta SQL para obtener todos los empleados
+$sql = "SELECT ID_EMP, CED_EMP, PASS_EMP, NOM_EMP, APE_EMP, CORR_EMP, EST_EMP, ROL_EMP FROM empleados";
+
+// Ejecutar la consulta
+$result = $con->query($sql);
+
+if ($result === false) {
+    // Si hay un error en la consulta SQL
+    echo json_encode(array('error' => 'Error al ejecutar la consulta SQL: ' . $con->error));
+    $obj->cerrarConexion();
+    exit;
+}
+
+// Verificar si hay resultados
+if ($result->num_rows > 0) {
+    // Arreglo para almacenar los empleados
+    $empleados = array();
+
+    // Iterar sobre los resultados y almacenar en el arreglo
+    while ($row = $result->fetch_assoc()) {
+        $empleados[] = $row;
+    }
+
+    // Liberar resultado
+    $result->free();
+} else {
+    // No se encontraron empleados
+    $empleados = array(); // Devolver un arreglo vacío en JSON
+}
+
+// Cerrar conexión
+$obj->cerrarConexion();
+
+// Devolver los empleados en formato JSON
+header('Content-Type: application/json');
+echo json_encode($empleados);
 ?>
