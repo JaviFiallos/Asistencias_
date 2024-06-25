@@ -72,6 +72,9 @@ if ($result->num_rows > 0) {
     $pdf->Output();
 } else {
     ob_end_clean();
-    echo "No se encontraron registros para la cédula y semana seleccionadas.";
+    echo "<script>
+    alert('No se encontraron registros para la cédula ingresada.');
+    window.location.href = '../Vista/dashboard.php?action=reporte_semanal';
+    </script>";
     exit();
 }
