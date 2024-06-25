@@ -14,7 +14,6 @@ $sumaDescuentos = 0;
 $sumaSubtotal = 0;
 $sumaHorasTrabajadas = 0;
 
-// Consulta SQL para obtener los registros de asistencia en el rango de fechas especificado
 $sql = "SELECT empleados.CED_EMP, empleados.APE_EMP, registro_asistencia.FECHA, registro_asistencia.JORNADA, 
         registro_asistencia.HORA_INGRESO, registro_asistencia.HORA_SALIDA, registro_asistencia.DESCUENTO, 
         registro_asistencia.HORAS_POR_JORNADA, registro_asistencia.SUBTOTAL_JORNADA
@@ -25,10 +24,9 @@ $sql = "SELECT empleados.CED_EMP, empleados.APE_EMP, registro_asistencia.FECHA, 
 
 $result = $con->query($sql);
 
-// Verificar si se encontraron registros
+
 if ($result->num_rows > 0) {
-    echo "Encontro";
-    // Crear un nuevo objeto FPDF para generar el PDF en formato horizontal (L)
+
     $pdf = new FPDF('L');
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
@@ -52,7 +50,8 @@ if ($result->num_rows > 0) {
     $pdf->SetFont('Arial', '', 12); // Cambiar a fuente normal para el contenido
 
     $currentCedula = '';
-    $totalesEmpleado = [];
+    $totalesEmpleado = ['descuentos' => 0, 'horas' => 0, 'subtotal' => 0];
+    $appliedDiscounts = []; // Array para rastrear descuentos aplicados
 
     // Iterar sobre los resultados de la consulta y agregar cada registro al PDF
     while ($row = $result->fetch_assoc()) {
@@ -64,12 +63,29 @@ if ($result->num_rows > 0) {
                 $pdf->Cell(25, 10, $totalesEmpleado['descuentos'], 1);
                 $pdf->Cell(37, 10, $totalesEmpleado['horas'], 1);
                 $pdf->Cell(35, 10, $totalesEmpleado['subtotal'], 1);
-                 $pdf->Ln();
+                $pdf->Ln();
+                
+                // Calcular ganancia total del empleado y verificar si es menor a 0
+                $gananciaTotal = $totalesEmpleado['subtotal'] - $totalesEmpleado['descuentos'];
+                if ($gananciaTotal < 0) {
+                    $gananciaTotal = 0.00;
+                }
+                
+                $pdf->Cell(180, 10, 'Ganancia Total del Empleado', 1);
+                $pdf->Cell(35, 10, number_format($gananciaTotal, 2, '.', ''), 1);
+                $pdf->Ln();
                 $pdf->Ln();
                 $pdf->SetFont('Arial', '', 12);
                 $totalesEmpleado = ['descuentos' => 0, 'horas' => 0, 'subtotal' => 0];
+                $appliedDiscounts = []; // Restablecer el array de descuentos aplicados
             }
             $currentCedula = $row['CED_EMP'];
+        }
+
+        // Aplicar descuento de 64 si la hora de salida es "00:00:00" y aún no se ha aplicado para la fecha
+        if ($row['HORA_SALIDA'] == "00:00:00" && !in_array($row['FECHA'], $appliedDiscounts)) {
+            $row['DESCUENTO'] = 64;
+            $appliedDiscounts[] = $row['FECHA']; // Marcar la fecha como aplicada
         }
 
         $pdf->Cell(25, 10, $row['CED_EMP'], 1);
@@ -94,6 +110,7 @@ if ($result->num_rows > 0) {
         $totalesEmpleado['subtotal'] += $row['SUBTOTAL_JORNADA'];
     }
 
+    // Agregar totales por último empleado
     if ($currentCedula !== '') {
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(180, 10, 'Totales por Empleado:', 1);
@@ -101,16 +118,24 @@ if ($result->num_rows > 0) {
         $pdf->Cell(37, 10, $totalesEmpleado['horas'], 1);
         $pdf->Cell(35, 10, $totalesEmpleado['subtotal'], 1);
         $pdf->Ln();
+        
+        // Calcular ganancia total del empleado y verificar si es menor a 0
+        $gananciaTotal = $totalesEmpleado['subtotal'] - $totalesEmpleado['descuentos'];
+        if ($gananciaTotal < 0) {
+            $gananciaTotal = 0.00;
+        }
+        
+        $pdf->Cell(180, 10, 'Ganancia Total del Empleado', 1);
+        $pdf->Cell(35, 10, number_format($gananciaTotal, 2, '.', ''), 1);
     }
     $pdf->Cell(180, 10, ' ', 0);
     $pdf->Ln();
     // Mostrar el total de descuentos y subtotal del mes
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(180, 10, 'Totales Generales del Mes:', 1);
-    $pdf->Cell(25, 10, $sumaDescuentos, 1);
+    $pdf->Cell(25, 10,"$$sumaDescuentos", 1);
     $pdf->Cell(37, 10, $sumaHorasTrabajadas, 1);
-    $pdf->Cell(35, 10, $sumaSubtotal, 1);
-
+    $pdf->Cell(35, 10,"$$sumaSubtotal", 1);
 
     ob_end_clean(); // Limpiar el buffer de salida antes de enviar el PDF
 

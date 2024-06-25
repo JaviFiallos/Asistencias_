@@ -4,6 +4,8 @@ class EnlacesPaginas {
     public static function enlacesPaginasModel($enlacesModel){
         if($enlacesModel == "usuarios" || 
         $enlacesModel == "asistencia"|| 
+        $enlacesModel == "viewRegister"|| 
+        $enlacesModel == "searchRegister"|| 
         $enlacesModel == "horarios_docentes"|| 
         $enlacesModel == "reporte_mensual"|| 
         $enlacesModel == "reporte_semanal" ){

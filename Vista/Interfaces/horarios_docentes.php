@@ -9,7 +9,7 @@
     <script>
         $(document).ready(function() {
             // Función para buscar y mostrar los resultados de la búsqueda
-            $('#ROL_EMP').on('input', function() {
+            $('#CED_EMP').on('input', function() {
                 var searchKeyword = $(this).val().trim();
 
                 if (searchKeyword.length > 0) {
@@ -26,10 +26,10 @@
                                     var nombreCompleto = persona.nombre + ' ' + persona.apellido;
                                     var idEmpleado = persona.id;
 
-                                    $('#resultado_busqueda').append('<div style=" border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;" class="nombre-docente" data-id="' + idEmpleado + '">' + nombreCompleto + '</div>');
+                                    $('#resultado_busqueda').append('<div style="border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;" class="nombre-docente" data-id="' + idEmpleado + '">' + nombreCompleto + '</div>');
                                 });
                             } else {
-                                $('#resultado_busqueda').html('<div style=" border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;" class="nombre-docente">No se encontraron resultados</div>');
+                                $('#resultado_busqueda').html('<div style="border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;" class="nombre-docente">No se encontraron resultados</div>');
                             }
                         }
                     });
@@ -43,7 +43,7 @@
                 var nombreCompleto = $(this).text().trim();
                 var idEmpleado = $(this).data('id');
 
-                $('#ROL_EMP').val(nombreCompleto);
+                $('#CED_EMP').val(nombreCompleto);
                 $('#input_id').val(idEmpleado);
 
                 $('#resultado_busqueda').html('');
@@ -149,13 +149,14 @@
 <body>
     <div class="container">
         <h1 class="titulo-seleccion">Asignar de horario</h1>
-        <div id="resultado_busqueda" style=" border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;"></div>
+        <div id="resultado_busqueda" style="border: 1px solid palevioletred; border-radius: 8px; margin: 5px; padding: 5px;"></div>
 
         <form id="form_horarios">
-            <label for="docente">Buscar Docente:</label>
-            <input type="text" id="ROL_EMP" name="ROL_EMP" required>
-            <h4 class="titulo-jornada">Jornada matutina:</h4>
+            <label for="docente">Buscar Docente por Cédula:</label>
+            <input type="text" id="CED_EMP" name="CED_EMP" required>
             <input type="hidden" name="ID_EMP" id="input_id">
+            
+            <h4 class="titulo-jornada">Jornada matutina:</h4>
             <div class="formulario-jornada">
                 <label for="hora_inicio_matutina">Desde:</label>
                 <input type="time" id="hora_inicio_matutina" name="hora_inicio_matutina" min="07:00" max="13:00" required>

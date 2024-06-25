@@ -3,7 +3,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <form action="../Modelo/RS.php" method="POST">
+        <form action="../Modelo/RS.php" method="POST" target="_blank">
             <div class="mb-3">
                 <label for="cedula" class="form-label">Ingrese la Cedula del Empleado a Reportar</label>
                 <input type="text" class="form-control" id="cedula" name="cedula">

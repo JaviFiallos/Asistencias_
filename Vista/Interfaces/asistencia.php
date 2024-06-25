@@ -104,7 +104,7 @@ foreach ($registros as $registro) {
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th colspan="7" style="text-align: center;" class="bg-danger bg-opacity-25">Registros de Asistencia</th>
+                    <th colspan="7" style="text-align: center;" class="bg-danger bg-opacity-25">Registros de Asistencia del Día</th>
                 </tr>
                 <tr>
                     <th>Fecha</th>

@@ -18,7 +18,7 @@
         <div class="formWrapper">
             <form action="login.php" method="post">
                 <div class="input-group">
-                    <label for="cedula">Email :</label>
+                    <label for="cedula">Cedula :</label>
                     <div class="input-wrapper">
                         <i class="icon fas fa-user"></i>
                         <input

@@ -51,10 +51,28 @@ $empleado = $_SESSION['empleado'];
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span>Registro Asistencia</span>
+            <span>Registrar Asistencia</span>
           </a>
         </li>
         <?php if ($empleado['rol'] === 'ADMIN') { ?>
+        <li class="sidebar-list-item">
+          <a href="./dashboard.php?action=viewRegister">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>Registros Docentes</span>
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="./dashboard.php?action=searchRegister">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>Buscar Registros</span>
+          </a>
+        </li>
         <li class="sidebar-list-item">
           <a href="./dashboard.php?action=usuarios">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
