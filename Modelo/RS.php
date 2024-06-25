@@ -54,14 +54,28 @@ if ($result->num_rows > 0) {
         $pdf->Cell(40, 10, $row['FECHA'], 1); // Add border
         $pdf->Cell(40, 10, $row['JORNADA'], 1); // Add border
         $pdf->Cell(40, 10, $row['HORA_INGRESO'], 1); // Add border
-        if($row['HORA_SALIDA'] == '00:00:00'){
+
+        if ($row['HORA_SALIDA'] == '00:00:00') {
+            $jornada = $row['JORNADA'];
+            $sqlHorario = "SELECT * FROM horarios WHERE JORNADA = '$jornada' AND ID_EMP_PER = (SELECT ID_EMP FROM empleados WHERE CED_EMP = '$cedula')";
+            $resultHorario = $con->query($sqlHorario);
+            $rowHorario = $resultHorario->fetch_assoc();
+
+            $horaEntrada = new DateTime($rowHorario['ENTRADA']);
+            $horaSalida = new DateTime($rowHorario['SALIDA']);
+            
+            $interval = $horaEntrada->diff($horaSalida);
+            $horasJornada = $interval->h + ($interval->i / 60); // Total hours as decimal
+            $descuento = 8 * $horasJornada; // Calculate the discount
+            
             $pdf->Cell(40, 10, 'No hay Registro', 1); // Add border
-            $pdf->Cell(35, 10, '64.00', 1); // Add border
-            $sumaDescuentos += 64;
+            $pdf->Cell(35, 10, number_format($descuento, 2), 1); // Add border and format to 2 decimals
+            $sumaDescuentos += $descuento;
         } else {
             $pdf->Cell(40, 10, $row['HORA_SALIDA'], 1); // Add border
             $pdf->Cell(35, 10, $row['DESCUENTO'], 1); // Add border
         }
+
         $pdf->Cell(40, 10, $row['HORAS_POR_JORNADA'], 1); // Add border
         $pdf->Cell(40, 10, $row['SUBTOTAL_JORNADA'], 1); // Add border
         $pdf->Ln();
@@ -70,9 +84,9 @@ if ($result->num_rows > 0) {
         $sumaSubtotal += $row['SUBTOTAL_JORNADA'];
     }
 
-    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . $sumaDescuentos); // Add border
+    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . number_format($sumaDescuentos, 2)); // Add border and format to 2 decimals
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . $sumaSubtotal); // Add border
+    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . number_format($sumaSubtotal, 2)); // Add border and format to 2 decimals
     ob_end_clean();
     $pdf->Output();
 } else {
