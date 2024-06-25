@@ -94,7 +94,6 @@ if ($result->num_rows > 0) {
         $totalesEmpleado['subtotal'] += $row['SUBTOTAL_JORNADA'];
     }
 
-    // Agregar totales por último empleado
     if ($currentCedula !== '') {
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(180, 10, 'Totales por Empleado:', 1);
@@ -111,6 +110,7 @@ if ($result->num_rows > 0) {
     $pdf->Cell(25, 10, $sumaDescuentos, 1);
     $pdf->Cell(37, 10, $sumaHorasTrabajadas, 1);
     $pdf->Cell(35, 10, $sumaSubtotal, 1);
+
 
     ob_end_clean(); // Limpiar el buffer de salida antes de enviar el PDF
 

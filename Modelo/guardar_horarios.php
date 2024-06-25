@@ -1,16 +1,79 @@
 <?php
 include '../modelo/Conexion.php';
+
 $conexion = new Conexion();
 $conexion->conectar();
 $conn = $conexion->getConexion();
-$response = array(); // Arreglo para almacenar la respuesta
+$response = array(); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $action = $_POST['action']; 
+
+    switch ($action) {
+        case 'Eliminar':
+            eliminarHorarios(); 
+            break;
+        case 'Editar':
+            editarHorarios();
+            break;
+        case 'Asignar':
+            asignarHorarios();
+            break;
+        default:
+            $response['message'] = 'Acción no válida.';
+            redirectWithMessage($response['message']);
+            exit;
+    }
+}else {
+    $response['message'] = 'Método de solicitud no válido.';
+    redirectWithMessage($response['message']);
+    exit;
+}
+
+function redirectWithMessage($message) {
+    header("Location: ../Vista/dashboard.php?action=horarios_docentes&mensaje=" . urlencode($message));
+    exit();
+}
+
+function eliminarHorarios() {
+    global $conn;
+    $id_empleado = $_POST['ID_EMP'];
+
+    // Eliminar horarios matutinos si existen
+    if (!empty($hora_inicio_matutina) && !empty($hora_fin_matutina)) {
+        $stmt = $conn->prepare("DELETE FROM HORARIOS WHERE ID_EMP_PER = ?");
+        $stmt->bind_param("ssi", $id_empleado);
+        if ($stmt->execute()) {
+            $response['message'] = 'Horarios matutinos eliminados correctamente.';
+        } else {
+            $response['message'] = 'Error al eliminar horarios matutinos: ' . $stmt->error;
+        }
+        $stmt->close();
+    }
+
+    // Eliminar horarios vespertinos si existen
+    if (!empty($hora_inicio_vespertina) && !empty($hora_fin_vespertina)) {
+        $stmt = $conn->prepare("DELETE FROM HORARIOS WHERE ENTRADA = ? AND SALIDA = ? AND JORNADA = 'Vespertina' AND ID_EMP_PER = ?");
+        $stmt->bind_param("ssi", $hora_inicio_vespertina, $hora_fin_vespertina, $id_empleado);
+        if ($stmt->execute()) {
+            $response['message'] = 'Horarios vespertinos eliminados correctamente.';
+        } else {
+            $response['message'] = 'Error al eliminar horarios vespertinos: ' . $stmt->error;
+        }
+        $stmt->close();
+    }
+
+    redirectWithMessage($response['message']);
+}
+
+function editarHorarios() {
+    global $conn;
+    $id_empleado = $_POST['ID_EMP'];
     $hora_inicio_matutina = $_POST['hora_inicio_matutina'];
     $hora_fin_matutina = $_POST['hora_fin_matutina'];
     $hora_inicio_vespertina = $_POST['hora_inicio_vespertina'];
     $hora_fin_vespertina = $_POST['hora_fin_vespertina'];
-    $id_empleado = $_POST['ID_EMP'];
+    $response = array(); // Arreglo para almacenar la respuesta
 
     // Función para calcular las horas de un rango de tiempo
     function calcularHoras($inicio, $fin) {
@@ -52,60 +115,96 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return true;
     }
 
-    // Calcular horas de jornada matutina y vespertina
-    $horasMatutinas = calcularHoras($hora_inicio_matutina, $hora_fin_matutina);
-    $horasVespertinas = calcularHoras($hora_inicio_vespertina, $hora_fin_vespertina);
-
-    // Validar que no se excedan las 8 horas en total
-    $totalHoras = $horasMatutinas + $horasVespertinas;
-
-    // Validar que los horarios de entrada no sean mayores que los horarios de salida
-    $validacionMatutina = validarHorario($hora_inicio_matutina, $hora_fin_matutina);
-    $validacionVespertina = validarHorario($hora_inicio_vespertina, $hora_fin_vespertina);
-
-    if ($totalHoras > 8 || !$validacionMatutina || !$validacionVespertina) {
-        $response['status'] = 'error';
-        if ($totalHoras > 8) {
-            $response['message'] = 'El total de horas no debe exceder 8 horas.';
-        } elseif (!$validacionMatutina) {
+    // Validar y editar horarios matutinos si existen
+    if (!empty($hora_inicio_matutina) && !empty($hora_fin_matutina)) {
+        if (!validarHorario($hora_inicio_matutina, $hora_fin_matutina)) {
+            $response['status'] = 'error';
             $response['message'] = 'El horario de entrada matutino no puede ser mayor o igual al horario de salida.';
-        } elseif (!$validacionVespertina) {
-            $response['message'] = 'El horario de entrada vespertino no puede ser mayor o igual al horario de salida.';
-        }
-    } else {
-        // Insertar horario matutino si existe
-        if (!empty($hora_inicio_matutina) && !empty($hora_fin_matutina)) {
-            $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, ?, ?)");
-            $jornadaMatutina = 'Matutina';
-            $stmt->bind_param("sssi", $hora_inicio_matutina, $hora_fin_matutina, $jornadaMatutina, $id_empleado);
-            if ($stmt->execute()) {
-                $response['status'] = 'success';
-                $response['message'] = 'Horario matutino guardado correctamente.';
-            } else {
-                $response['status'] = 'error';
-                $response['message'] = 'Error al guardar el horario matutino: ' . $stmt->error;
-            }
-        }
+        } else {
+            // Calcular las horas de jornada matutina
+            $horasMatutinas = calcularHoras($hora_inicio_matutina, $hora_fin_matutina);
 
-        // Insertar horario vespertino si existe
-        if (!empty($hora_inicio_vespertina) && !empty($hora_fin_vespertina)) {
-            $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, ?, ?)");
-            $jornadaVespertina = 'Vespertina';
-            $stmt->bind_param("sssi", $hora_inicio_vespertina, $hora_fin_vespertina, $jornadaVespertina, $id_empleado);
-            if ($stmt->execute()) {
-                $response['status'] = 'success';
-                $response['message'] = 'Horario vespertino guardado correctamente.';
-            } else {
+            if ($horasMatutinas > 8) {
                 $response['status'] = 'error';
-                $response['message'] = 'Error al guardar el horario vespertino: ' . $stmt->error;
+                $response['message'] = 'El total de horas matutinas no debe exceder 8 horas.';
+            } else {
+                $stmt = $conn->prepare("UPDATE HORARIOS SET ENTRADA = ?, SALIDA = ? WHERE JORNADA = 'Matutina' AND ID_EMP_PER = ?");
+                $stmt->bind_param("ssi", $hora_inicio_matutina, $hora_fin_matutina, $id_empleado);
+                if ($stmt->execute()) {
+                    $response['status'] = 'success';
+                    $response['message'] = 'Horarios matutinos actualizados correctamente.';
+                } else {
+                    $response['status'] = 'error';
+                    $response['message'] = 'Error al actualizar horarios matutinos: ' . $stmt->error;
+                }
+                $stmt->close();
             }
+        }
+    }
+
+    // Validar y editar horarios vespertinos si existen
+    if (!empty($hora_inicio_vespertina) && !empty($hora_fin_vespertina)) {
+        if (!validarHorario($hora_inicio_vespertina, $hora_fin_vespertina)) {
+            $response['status'] = 'error';
+            $response['message'] = 'El horario de entrada vespertino no puede ser mayor o igual al horario de salida.';
+        } else {
+            // Calcular las horas de jornada vespertina
+            $horasVespertinas = calcularHoras($hora_inicio_vespertina, $hora_fin_vespertina);
+
+            if ($horasVespertinas > 8) {
+                $response['status'] = 'error';
+                $response['message'] = 'El total de horas vespertinas no debe exceder 8 horas.';
+            } else {
+                $stmt = $conn->prepare("UPDATE HORARIOS SET ENTRADA = ?, SALIDA = ? WHERE JORNADA = 'Vespertina' AND ID_EMP_PER = ?");
+                $stmt->bind_param("ssi", $hora_inicio_vespertina, $hora_fin_vespertina, $id_empleado);
+                if ($stmt->execute()) {
+                    $response['status'] = 'success';
+                    $response['message'] = 'Horarios vespertinos actualizados correctamente.';
+                } else {
+                    $response['status'] = 'error';
+                    $response['message'] = 'Error al actualizar horarios vespertinos: ' . $stmt->error;
+                }
+                $stmt->close();
+            }
+        }
+    }
+
+    redirectWithMessage($response['message']);
+}
+
+function asignarHorarios() {
+    global $conn, $response;
+    $id_empleado = $_POST['ID_EMP'];
+    $hora_inicio_matutina = $_POST['hora_inicio_matutina'];
+    $hora_fin_matutina = $_POST['hora_fin_matutina'];
+    $hora_inicio_vespertina = $_POST['hora_inicio_vespertina'];
+    $hora_fin_vespertina = $_POST['hora_fin_vespertina'];
+
+    // Asignar horarios matutinos si existen
+    if (!empty($hora_inicio_matutina) && !empty($hora_fin_matutina)) {
+        $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, 'MATUTINA', ?)");
+        $stmt->bind_param("ssi", $hora_inicio_matutina, $hora_fin_matutina, $id_empleado);
+        if ($stmt->execute()) {
+            $response['message'] = 'Horarios matutinos asignados correctamente.';
+        } else {
+            $response['message'] = 'Error al asignar horarios matutinos: ' . $stmt->error;
         }
         $stmt->close();
     }
 
-    // Devolver la respuesta como JSON
-    echo json_encode($response);
+    // Asignar horarios vespertinos si existen
+    if (!empty($hora_inicio_vespertina) && !empty($hora_fin_vespertina)) {
+        $stmt = $conn->prepare("INSERT INTO HORARIOS (ENTRADA, SALIDA, JORNADA, ID_EMP_PER) VALUES (?, ?, 'VESPERTINA', ?)");
+        $stmt->bind_param("ssi", $hora_inicio_vespertina, $hora_fin_vespertina, $id_empleado);
+        if ($stmt->execute()) {
+            $response['message'] = 'Horarios vespertinos asignados correctamente.';
+        } else {
+            $response['message'] = 'Error al asignar horarios vespertinos: ' . $stmt->error;
+        }
+        $stmt->close();
+    }
+    redirectWithMessage($response['message']);
 }
 
-$conexion->cerrarConexion();
+$conexion->desconectar();
 ?>
