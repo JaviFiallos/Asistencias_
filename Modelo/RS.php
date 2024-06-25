@@ -35,39 +35,44 @@ if ($result->num_rows > 0) {
     $pdf = new FPDF('L');
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(40, 10, 'Reporte Semanal');
+    $pdf->Cell(40, 10, 'Reporte Semanal'); // Add border
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Empleado: ' . $rowEmpleado['NOM_EMP'] . ' ' . $rowEmpleado['APE_EMP']);
+    $pdf->Cell(40, 10, 'Empleado: ' . $rowEmpleado['NOM_EMP'] . ' ' . $rowEmpleado['APE_EMP']); // Add border
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Cedula: ' . $rowEmpleado['CED_EMP']);
+    $pdf->Cell(40, 10, 'Cedula: ' . $rowEmpleado['CED_EMP']); // Add border
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Fecha');
-    $pdf->Cell(40, 10, 'Jornada');
-    $pdf->Cell(40, 10, 'Hora Entrada');
-    $pdf->Cell(40, 10, 'Hora Salida');
-    $pdf->Cell(35, 10, 'Descuento');
-    $pdf->Cell(40, 10, 'Horas Trabajadas');
-    $pdf->Cell(40, 10, 'Subtotal');
+    $pdf->Cell(40, 10, 'Fecha', 1); // Add border
+    $pdf->Cell(40, 10, 'Jornada', 1); // Add border
+    $pdf->Cell(40, 10, 'Hora Entrada', 1); // Add border
+    $pdf->Cell(40, 10, 'Hora Salida', 1); // Add border
+    $pdf->Cell(35, 10, 'Descuento', 1); // Add border
+    $pdf->Cell(40, 10, 'Horas Trabajadas', 1); // Add border
+    $pdf->Cell(40, 10, 'Subtotal', 1); // Add border
     $pdf->Ln();
     
     while ($row = $result->fetch_assoc()) {
-        $pdf->Cell(40, 10, $row['FECHA']);
-        $pdf->Cell(40, 10, $row['JORNADA']);
-        $pdf->Cell(40, 10, $row['HORA_INGRESO']);
-        $pdf->Cell(40, 10, $row['HORA_SALIDA']);
-        $pdf->Cell(35, 10, $row['DESCUENTO']);
-        $pdf->Cell(40, 10, $row['HORAS_POR_JORNADA']);
-        $pdf->Cell(40, 10, $row['SUBTOTAL_JORNADA']);
+        $pdf->Cell(40, 10, $row['FECHA'], 1); // Add border
+        $pdf->Cell(40, 10, $row['JORNADA'], 1); // Add border
+        $pdf->Cell(40, 10, $row['HORA_INGRESO'], 1); // Add border
+        if($row['HORA_SALIDA'] == '00:00:00'){
+            $pdf->Cell(40, 10, 'No hay Registro', 1); // Add border
+            $pdf->Cell(35, 10, '64.00', 1); // Add border
+            $sumaDescuentos += 64;
+        } else {
+            $pdf->Cell(40, 10, $row['HORA_SALIDA'], 1); // Add border
+            $pdf->Cell(35, 10, $row['DESCUENTO'], 1); // Add border
+        }
+        $pdf->Cell(40, 10, $row['HORAS_POR_JORNADA'], 1); // Add border
+        $pdf->Cell(40, 10, $row['SUBTOTAL_JORNADA'], 1); // Add border
         $pdf->Ln();
 
         $sumaDescuentos += $row['DESCUENTO'];
         $sumaSubtotal += $row['SUBTOTAL_JORNADA'];
-
     }
 
-    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . $sumaDescuentos);
+    $pdf->Cell(40, 10, 'Descuento Esta Semana: $' . $sumaDescuentos); // Add border
     $pdf->Ln();
-    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . $sumaSubtotal);
+    $pdf->Cell(40, 10, 'Subtotal Esta Semana: $' . $sumaSubtotal); // Add border
     ob_end_clean();
     $pdf->Output();
 } else {
